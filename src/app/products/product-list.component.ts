@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { IProduct } from './product';
 import { ProductService } from './product.service';
+import { CardService } from '../cards/card.service';
+import { ICard } from '../cards/card';
 
 @Component({
     selector: 'pm-products',
@@ -8,42 +10,66 @@ import { ProductService } from './product.service';
     styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit {
-    pageTitle: string = 'Products List';
-    imageWidth: number = 50;
-    imageMargin: number = 2;
-    showImage: boolean = false;
+  deckId: string;
+  cards: ICard[] = [];
+  
+  pageTitle: string = 'Products List';
+  imageWidth: number = 50;
+  imageMargin: number = 2;
+  showImage: boolean = false;
+  errorMessage: string = '';
 
-    _listFilter: string;
-    get listFilter(): string {
-      return this._listFilter;
+  _listFilter: string;
+  get listFilter(): string {
+    return this._listFilter;
+  }
+  set listFilter(value:string) {
+    this._listFilter = value;
+    this.filteredProducts = this.listFilter ? this.performFilter(this.listFilter) : this.products;
+  }
+
+  filteredProducts: IProduct[];
+  products: IProduct[] = [];
+
+    constructor(private productService: ProductService, private cardService: CardService) {
     }
-    set listFilter(value:string) {
-      this._listFilter = value;
-      this.filteredProducts = this.listFilter ? this.performFilter(this.listFilter) : this.products;
+
+    onRatingClicked(message: string): void {
+      this.pageTitle = 'Product List: ' + message;
     }
 
-    filteredProducts: IProduct[];
-    products: IProduct[] = [];
+    performFilter(filterBy: string): IProduct[] {
+      filterBy = filterBy.toLocaleLowerCase();
+      return this.products.filter((product: IProduct) =>
+            product.productName.toLocaleLowerCase().indexOf(filterBy) !== -1)
+    }
 
-      constructor(private productService: ProductService) {
-      }
+    toggleImage(): void {
+      this.showImage = !this.showImage;
+    }
 
-      onRatingClicked(message: string): void {
-        this.pageTitle = 'Product List: ' + message;
-      }
+    draw(): void {
+      this.cardService.draw(this.deckId).subscribe(
+        data => {
+          this.cards.push(data["cards"].pop());
+        }
+      );
+    }
 
-      performFilter(filterBy: string): IProduct[] {
-        filterBy = filterBy.toLocaleLowerCase();
-        return this.products.filter((product: IProduct) =>
-              product.productName.toLocaleLowerCase().indexOf(filterBy) !== -1)
-      }
+    ngOnInit(): void {
+      this.cardService.getDeck().subscribe(
+        data => {
+          this.deckId = data["deck_id"];
+          console.log(data);
+        }
+      );
 
-      toggleImage(): void {
-        this.showImage = !this.showImage;
-      }
-
-      ngOnInit(): void {
-        this.products = this.productService.getProducts();
-        this.filteredProducts = this.products;
-      }
+      this.productService.getProducts().subscribe(
+        products => {
+          this.products = products;
+          this.filteredProducts = this.products;
+        },
+        error => this.errorMessage = <any>error
+      );
+    }
 }

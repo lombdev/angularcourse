@@ -59,3 +59,40 @@
         </div>
     </div>
 </div>
+
+<div class="card">
+    <div class="card-header">
+        Cards
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <button (click)='draw()' class="btn btn-primary">
+                                Draw
+                            </button>
+                        </th>
+                        <th>Suit</th>
+                        <th>Code</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor='let card of cards'>
+                        <td>
+                            <img [src]='card.image'
+                            [title]='card.Code'
+                            [style.width.px]='imageWidth'
+                            [style.margin.x]='imageMargin' />
+                        </td>
+                        <td>{{card.suit}}</td>
+                        <td>{{card.code}}</td>
+                        <td>{{card.value}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
