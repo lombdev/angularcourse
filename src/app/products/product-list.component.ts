@@ -5,7 +5,6 @@ import { CardService } from '../cards/card.service';
 import { ICard } from '../cards/card';
 
 @Component({
-    selector: 'pm-products',
     templateUrl: './product-list.component.html',
     styleUrls: ['./product-list.component.css']
 })
