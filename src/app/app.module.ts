@@ -8,6 +8,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { WelcomeComponent } from './home/welcome.component';
 import { TokenInterceptor } from './shared/token.interceptor';
 import { ProductModule } from './products/product.module';
+import { ToastrModule } from 'ngx-toastr';
+import { ErrorHandlerInterceptor } from './error-handler-interceptor/error-handler-interceptor';
 
 @NgModule({
   declarations: [
@@ -23,14 +25,17 @@ import { ProductModule } from './products/product.module';
       { path: '', redirectTo: 'welcome', pathMatch: 'full' },
       { path: '**', redirectTo: 'welcome', pathMatch: 'full' }
     ]),
-    ProductModule
+    ProductModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-center'
+    })
   ],
   providers: [
-    // {
-    //   provide: HTTP_INTERCEPTORS,
-    //   useClass: TokenInterceptor,
-    //   multi: true
-    // }
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorHandlerInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
