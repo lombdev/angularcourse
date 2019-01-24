@@ -4,6 +4,7 @@ import { ProductDetailComponent } from './product-detail.component';
 import { ConvertToSpacesPipe } from '../shared/convert-to-spaces.pipe';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
+import { HasRoleDirective } from '../directives/hasrole.directive';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { SharedModule } from '../shared/shared.module';
     SharedModule
   ],
   declarations: [
+    HasRoleDirective,
     ProductListComponent,
     ProductDetailComponent,
     ConvertToSpacesPipe
