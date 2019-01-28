@@ -6,7 +6,6 @@ import { RouterModule, Router } from '@angular/router';
 import { AppComponent } from './app.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { WelcomeComponent } from './home/welcome.component';
-import { TokenInterceptor } from './shared/token.interceptor';
 import { ProductModule } from './products/product.module';
 import { ToastrModule } from 'ngx-toastr';
 import { ErrorHandlerInterceptor } from './error-handler-interceptor/error-handler-interceptor';
